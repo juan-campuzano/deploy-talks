@@ -8,16 +8,24 @@ import 'package:provider/provider.dart';
 import 'features/admin/admin_session_notifier.dart';
 import 'features/chat/catalog/chat_catalog.dart';
 import 'features/enter_name/user_notifier.dart';
-import 'firebase_options.dart';
 import 'router.dart';
 import 'services/admin_service.dart';
 import 'services/chat_service.dart';
 import 'services/genui_service.dart';
 import 'services/presence_service.dart';
 
+const _webFirebaseOptions = FirebaseOptions(
+  apiKey: String.fromEnvironment('FIREBASE_API_KEY'),
+  authDomain: String.fromEnvironment('FIREBASE_AUTH_DOMAIN'),
+  projectId: String.fromEnvironment('FIREBASE_PROJECT_ID'),
+  storageBucket: String.fromEnvironment('FIREBASE_STORAGE_BUCKET'),
+  messagingSenderId: String.fromEnvironment('FIREBASE_MESSAGING_SENDER_ID'),
+  appId: String.fromEnvironment('FIREBASE_APP_ID'),
+);
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  await Firebase.initializeApp(options: _webFirebaseOptions);
   runApp(const DeployTalksApp());
 }
 
