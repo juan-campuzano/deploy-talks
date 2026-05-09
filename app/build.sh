@@ -1,15 +1,6 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Instalar Flutter si no está disponible
-if ! command -v flutter &> /dev/null; then
-  curl -fsSL "https://storage.googleapis.com/flutter_infra_release/releases/stable/linux/flutter_linux_3.32.0-stable.tar.xz" \
-    | tar -xJ -C "$HOME"
-  export PATH="$PATH:$HOME/flutter/bin"
-  flutter precache --web
-fi
-
-cd app
 
 flutter build web \
   --dart-define=ADMIN_PASSWORD=$ADMIN_PASSWORD \
