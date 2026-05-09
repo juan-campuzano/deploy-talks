@@ -1,8 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-
-flutter build web \
+flutter/bin/flutter build web \
   --dart-define=ADMIN_PASSWORD=$ADMIN_PASSWORD \
   --dart-define=FIREBASE_API_KEY="$FIREBASE_API_KEY" \
   --dart-define=FIREBASE_AUTH_DOMAIN="$FIREBASE_AUTH_DOMAIN" \
