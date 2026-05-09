@@ -4,7 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'features/admin/admin_dashboard_page.dart';
 import 'features/admin/admin_login_page.dart';
 import 'features/admin/admin_session_notifier.dart';
-import 'features/chat/chat_page.dart';
+import 'features/home/home_page.dart';
 import 'features/enter_name/enter_name_page.dart';
 import 'features/enter_name/user_notifier.dart';
 
@@ -21,7 +21,7 @@ GoRouter buildRouter(
         path: '/enter-name',
         builder: (context, state) => EnterNamePage(userNotifier: userNotifier),
       ),
-      GoRoute(path: '/chat', builder: (context, state) => const ChatPage()),
+      GoRoute(path: '/chat', builder: (context, state) => const HomePage()),
       GoRoute(
         path: '/admin',
         builder: (context, state) => ValueListenableBuilder<bool>(
