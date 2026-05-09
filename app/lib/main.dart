@@ -10,6 +10,7 @@ import 'firebase_options.dart';
 import 'router.dart';
 import 'services/chat_service.dart';
 import 'services/genui_service.dart';
+import 'services/presence_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -28,12 +29,14 @@ class _DeployTalksAppState extends State<DeployTalksApp> {
   late final UserNotifier _userNotifier;
   late final ChatService _chatService;
   late final GenuiService _genuiService;
+  late final PresenceService _presenceService;
 
   @override
   void initState() {
     super.initState();
     _userNotifier = UserNotifier(FirebaseAuth.instance);
     _chatService = ChatService(FirebaseFirestore.instance);
+    _presenceService = PresenceService(FirebaseFirestore.instance);
 
     _genuiService = GenuiService(catalog: buildChatCatalog());
   }
@@ -52,6 +55,7 @@ class _DeployTalksAppState extends State<DeployTalksApp> {
         ChangeNotifierProvider<UserNotifier>.value(value: _userNotifier),
         Provider<ChatService>.value(value: _chatService),
         Provider<GenuiService>.value(value: _genuiService),
+        Provider<PresenceService>.value(value: _presenceService),
       ],
       child: Builder(
         builder: (context) {

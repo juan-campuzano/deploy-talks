@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 
@@ -11,25 +13,37 @@ class UserNotifier extends ValueNotifier<AppUser?> {
 
   final FirebaseAuth _auth;
 
+  /// Unique ID for this browser tab / app instance.
+  /// Generated once in memory so it is never shared across tabs or page reloads,
+  /// ensuring that `isOwn` comparisons work correctly even when multiple tabs
+  /// share the same Firebase Anonymous Auth UID.
+  final String _sessionId = _generateSessionId();
+
+  static String _generateSessionId() {
+    const chars = 'abcdefghijklmnopqrstuvwxyz0123456789';
+    final rng = Random.secure();
+    return List.generate(20, (_) => chars[rng.nextInt(chars.length)]).join();
+  }
+
   /// Signs in anonymously and stores the user with the given [displayName].
   Future<void> setUser(String displayName) async {
     final trimmed = displayName.trim();
     if (trimmed.isEmpty) throw ArgumentError('displayName must not be empty');
 
-    UserCredential credential;
-    if (_auth.currentUser != null) {
-      credential = await _auth.signInAnonymously();
-    } else {
-      credential = await _auth.signInAnonymously();
+    if (_auth.currentUser == null) {
+      await _auth.signInAnonymously();
     }
 
-    final uid = credential.user!.uid;
-    value = AppUser(uid: uid, displayName: trimmed);
+    final uid = _auth.currentUser!.uid;
+    value = AppUser(uid: uid, displayName: trimmed, sessionId: _sessionId);
   }
 
-  /// Signs out and clears the current user.
+  /// Clears the current user session without signing out of Firebase Auth.
+  ///
+  /// Firebase Anonymous Auth is shared across all browser tabs; calling
+  /// signOut() would revoke authentication for every open tab. Instead we
+  /// only clear the local AppUser state so the router redirects to /enter-name.
   Future<void> clearUser() async {
-    await _auth.signOut();
     value = null;
   }
 }

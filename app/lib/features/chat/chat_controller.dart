@@ -54,7 +54,7 @@ class ChatController extends ChangeNotifier {
       if (_processedMessageIds.contains(msg.id)) continue;
       _processedMessageIds.add(msg.id);
 
-      final isOwn = msg.senderId == currentUser.uid;
+      final isOwn = msg.sessionId == currentUser.sessionId;
       final surfaceId = genuiService.renderMessageAsBubble(msg, isOwn);
       _messageIdToSurfaceId[msg.id] = surfaceId;
       _orderedSurfaceIds.add(surfaceId);
