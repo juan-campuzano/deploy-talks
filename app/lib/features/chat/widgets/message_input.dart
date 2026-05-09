@@ -119,9 +119,7 @@ class _MessageInputState extends State<MessageInput> {
                     )
                   : null,
               color: _canSend ? null : AppColors.surfaceEl,
-              border: _canSend
-                  ? null
-                  : Border.all(color: AppColors.border),
+              border: _canSend ? null : Border.all(color: AppColors.border),
             ),
             child: Material(
               color: Colors.transparent,
@@ -141,9 +139,7 @@ class _MessageInputState extends State<MessageInput> {
                       : Icon(
                           Icons.send_rounded,
                           size: 18,
-                          color: _canSend
-                              ? Colors.white
-                              : AppColors.textMuted,
+                          color: _canSend ? Colors.white : AppColors.textMuted,
                         ),
                 ),
               ),

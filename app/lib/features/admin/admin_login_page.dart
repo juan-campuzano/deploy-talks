@@ -166,8 +166,9 @@ class _AdminLoginPageState extends State<AdminLoginPage> {
                           ),
                           textInputAction: TextInputAction.done,
                           onFieldSubmitted: (_) => _submit(),
-                          validator: (v) =>
-                              (v == null || v.isEmpty) ? 'Ingresa la contraseña' : null,
+                          validator: (v) => (v == null || v.isEmpty)
+                              ? 'Ingresa la contraseña'
+                              : null,
                           onChanged: (_) => setState(() => _error = null),
                         ),
                         if (_error != null) ...[

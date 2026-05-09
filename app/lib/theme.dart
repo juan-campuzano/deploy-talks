@@ -304,5 +304,4 @@ class AppTheme {
     iconTheme: IconThemeData(color: AppColors.textSecondary),
     actionsIconTheme: IconThemeData(color: AppColors.textSecondary),
   );
-
 }

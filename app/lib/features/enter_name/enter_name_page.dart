@@ -120,8 +120,8 @@ class _EnterNamePageState extends State<EnterNamePage> {
                       Text(
                         'Únete al chat en vivo',
                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                              color: AppColors.textSecondary,
-                            ),
+                          color: AppColors.textSecondary,
+                        ),
                       ),
                       const SizedBox(height: 36),
                       TextFormField(
@@ -210,4 +210,3 @@ class _EnterNamePageState extends State<EnterNamePage> {
     );
   }
 }
-

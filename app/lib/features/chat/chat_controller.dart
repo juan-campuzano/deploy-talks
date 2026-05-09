@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 
 import '../../models/app_user.dart';
+import '../../models/chat_item.dart';
 import '../../models/chat_message.dart';
 import '../../services/chat_service.dart';
 import '../../services/genui_service.dart';
@@ -23,20 +24,20 @@ class ChatController extends ChangeNotifier {
   /// Maps message ID → surfaceId returned by gen_ui
   final Map<String, String> _messageIdToSurfaceId = {};
 
-  /// Ordered list of surfaceIds for rendering
-  final List<String> _orderedSurfaceIds = [];
+  /// Ordered list of chat items for rendering
+  final List<ChatItem> _orderedItems = [];
 
   /// Set to track already-processed message IDs (avoids duplicates)
   final Set<String> _processedMessageIds = {};
 
   bool _isLoadingHistory = true;
-  StreamSubscription<List<ChatMessage>>? _subscription;
+  StreamSubscription<List<ChatMessage>>? _messagesSubscription;
 
-  List<String> get orderedSurfaceIds => List.unmodifiable(_orderedSurfaceIds);
+  List<ChatItem> get orderedItems => List.unmodifiable(_orderedItems);
   bool get isLoadingHistory => _isLoadingHistory;
 
   void _init() {
-    _subscription = chatService
+    _messagesSubscription = chatService
         .messagesStream('public')
         .listen(
           _onMessages,
@@ -57,7 +58,7 @@ class ChatController extends ChangeNotifier {
       final isOwn = msg.sessionId == currentUser.sessionId;
       final surfaceId = genuiService.renderMessageAsBubble(msg, isOwn);
       _messageIdToSurfaceId[msg.id] = surfaceId;
-      _orderedSurfaceIds.add(surfaceId);
+      _orderedItems.add(MessageItem(surfaceId));
       didChange = true;
     }
 
@@ -71,7 +72,7 @@ class ChatController extends ChangeNotifier {
 
   @override
   void dispose() {
-    _subscription?.cancel();
+    _messagesSubscription?.cancel();
     super.dispose();
   }
 }
