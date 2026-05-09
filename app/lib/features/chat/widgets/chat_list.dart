@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../../models/chat_item.dart';
 import '../../../theme.dart';
 import '../chat_controller.dart';
 import '../../../services/genui_service.dart';
@@ -38,7 +39,7 @@ class _ChatListState extends State<ChatList> {
   Widget build(BuildContext context) {
     final controller = context.watch<ChatController>();
     final genuiService = context.read<GenuiService>();
-    final surfaceIds = controller.orderedSurfaceIds;
+    final items = controller.orderedItems;
     final isLoading = controller.isLoadingHistory;
 
     if (isLoading) {
@@ -50,7 +51,9 @@ class _ChatListState extends State<ChatList> {
       );
     }
 
-    if (surfaceIds.isEmpty) {
+    final hasMessages = items.any((i) => i is MessageItem);
+
+    if (!hasMessages && items.isEmpty) {
       return Center(
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -87,14 +90,42 @@ class _ChatListState extends State<ChatList> {
 
     return ListView.builder(
       controller: _scrollController,
-      itemCount: surfaceIds.length,
+      itemCount: items.length,
       padding: const EdgeInsets.symmetric(vertical: 8),
       itemBuilder: (context, index) {
-        return GenuiBubble(
-          surfaceId: surfaceIds[index],
-          controller: genuiService.controller,
-        );
+        final item = items[index];
+        return switch (item) {
+          MessageItem(:final surfaceId) => GenuiBubble(
+            surfaceId: surfaceId,
+            controller: genuiService.controller,
+          ),
+          SystemEventItem(:final text) => _SystemEventTile(text: text),
+        };
       },
+    );
+  }
+}
+
+class _SystemEventTile extends StatelessWidget {
+  const _SystemEventTile({required this.text});
+
+  final String text;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 6),
+      child: Center(
+        child: Text(
+          text,
+          style: const TextStyle(
+            fontFamily: 'Plus Jakarta Sans',
+            fontSize: 11,
+            color: AppColors.textMuted,
+            letterSpacing: 0.2,
+          ),
+        ),
+      ),
     );
   }
 }
