@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../theme.dart';
 import '../chat/chat_page.dart';
 import '../gemini_chat/gemini_chat_page.dart';
+import '../genui_chat/genui_chat_page.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -10,7 +11,7 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 2,
+      length: 3,
       child: Scaffold(
         backgroundColor: AppColors.bg,
         appBar: AppBar(
@@ -35,10 +36,13 @@ class HomePage extends StatelessWidget {
             tabs: [
               Tab(text: 'Chat Grupal'),
               Tab(text: 'Gemini'),
+              Tab(text: 'GenUI'),
             ],
           ),
         ),
-        body: const TabBarView(children: [ChatPage(), GeminiChatPage()]),
+        body: const TabBarView(
+          children: [ChatPage(), GeminiChatPage(), GenuiChatPage()],
+        ),
       ),
     );
   }

@@ -30,7 +30,8 @@ class GeminiInputBar extends StatelessWidget {
               enabled: !isLoading,
               maxLines: null,
               keyboardType: TextInputType.multiline,
-              textInputAction: TextInputAction.newline,
+              textInputAction: TextInputAction.send,
+              onSubmitted: (_) => onSend?.call(),
               style: const TextStyle(
                 fontFamily: 'Plus Jakarta Sans',
                 color: AppColors.textPrimary,
