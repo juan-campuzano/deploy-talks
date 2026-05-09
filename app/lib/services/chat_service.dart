@@ -19,6 +19,7 @@ class ChatService {
         id: '',
         senderId: user.uid,
         senderName: user.displayName,
+        sessionId: user.sessionId,
         text: trimmed,
         timestamp: DateTime.now(),
         roomId: 'public',

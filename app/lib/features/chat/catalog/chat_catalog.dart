@@ -9,7 +9,8 @@ const String kChatBubbleType = 'ChatBubble';
 const String kChatBubbleSystemPromptFragment = '''
 You render every chat message as a ChatBubble surface.
 - When isOwn is true: align the bubble to the RIGHT and use a blue background.
-- When isOwn is false: align the bubble to the LEFT, use a grey background, and show the senderName above the text.
+- When isOwn is false: align the bubble to the LEFT and use a grey background.
+- Always show the senderName above the bubble text, regardless of the isOwn value.
 Always respond with a single createSurface call using the ChatBubble component as root.
 ''';
 
@@ -46,18 +47,23 @@ Catalog buildChatCatalog() {
         child: Column(
           crossAxisAlignment: alignment,
           children: [
-            if (!isOwn)
-              Padding(
-                padding: const EdgeInsets.only(left: 4, bottom: 2),
-                child: Text(
-                  senderName,
-                  style: const TextStyle(
-                    fontSize: 11,
-                    fontWeight: FontWeight.w600,
-                    color: Color(0xFF757575),
-                  ),
+            Padding(
+              padding: EdgeInsets.only(
+                left: isOwn ? 0 : 4,
+                right: isOwn ? 4 : 0,
+                bottom: 2,
+              ),
+              child: Text(
+                senderName,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: const TextStyle(
+                  fontSize: 11,
+                  fontWeight: FontWeight.w600,
+                  color: Color(0xFF757575),
                 ),
               ),
+            ),
             Container(
               constraints: const BoxConstraints(maxWidth: 480),
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
