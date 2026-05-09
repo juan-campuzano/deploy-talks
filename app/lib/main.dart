@@ -13,6 +13,7 @@ import 'services/admin_service.dart';
 import 'services/chat_service.dart';
 import 'services/genui_service.dart';
 import 'services/presence_service.dart';
+import 'theme.dart';
 
 const _webFirebaseOptions = FirebaseOptions(
   apiKey: String.fromEnvironment('FIREBASE_API_KEY'),
@@ -80,11 +81,10 @@ class _DeployTalksAppState extends State<DeployTalksApp> {
         Provider<AdminService>.value(value: _adminService),
       ],
       child: MaterialApp.router(
-        title: 'Deploy Talks Chat',
-        theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.indigo),
-          useMaterial3: true,
-        ),
+        title: 'Deploy Talks',
+        theme: AppTheme.dark,
+        darkTheme: AppTheme.dark,
+        themeMode: ThemeMode.dark,
         routerConfig: _router,
       ),
     );

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../services/admin_service.dart';
+import '../../../theme.dart';
 
 class ClearChatCard extends StatefulWidget {
   const ClearChatCard({super.key, required this.adminService});
@@ -32,7 +33,7 @@ class _ClearChatCardState extends State<ClearChatCard> {
           FilledButton(
             onPressed: () => Navigator.pop(ctx, true),
             style: FilledButton.styleFrom(
-              backgroundColor: Theme.of(ctx).colorScheme.error,
+              backgroundColor: AppColors.danger,
             ),
             child: const Text('Limpiar'),
           ),
@@ -49,7 +50,7 @@ class _ClearChatCardState extends State<ClearChatCard> {
 
     try {
       await widget.adminService.clearChat();
-      if (mounted) setState(() => _message = 'Chat limpiado correctamente.');
+      if (mounted) setState(() => _message = '✓ Chat limpiado correctamente.');
     } catch (e) {
       if (mounted) {
         setState(() => _message = 'Error al limpiar el chat: $e');
@@ -61,57 +62,110 @@ class _ClearChatCardState extends State<ClearChatCard> {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                const Icon(Icons.delete_sweep),
-                const SizedBox(width: 8),
-                Text(
-                  'Limpiar Chat',
-                  style: Theme.of(context).textTheme.titleMedium,
+    final isError = _message?.startsWith('Error') ?? false;
+
+    return Container(
+      decoration: BoxDecoration(
+        color: AppColors.surface,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: AppColors.border),
+      ),
+      padding: const EdgeInsets.all(20),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Container(
+                width: 32,
+                height: 32,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(8),
+                  color: AppColors.dangerDim,
                 ),
-              ],
-            ),
-            const SizedBox(height: 8),
-            const Text(
-              'Elimina todos los mensajes del chat para todos los usuarios.',
-            ),
-            if (_message != null) ...[
-              const SizedBox(height: 8),
-              Text(
-                _message!,
+                child: const Icon(
+                  Icons.delete_sweep_rounded,
+                  size: 16,
+                  color: AppColors.danger,
+                ),
+              ),
+              const SizedBox(width: 10),
+              const Text(
+                'Limpiar Chat',
                 style: TextStyle(
-                  color: _message!.startsWith('Error')
-                      ? Theme.of(context).colorScheme.error
-                      : Colors.green,
+                  fontFamily: 'Syne',
+                  fontWeight: FontWeight.w600,
+                  fontSize: 15,
+                  color: AppColors.textPrimary,
                 ),
               ),
             ],
+          ),
+          const SizedBox(height: 10),
+          const Text(
+            'Elimina todos los mensajes del chat para todos los usuarios.',
+            style: TextStyle(
+              fontFamily: 'Plus Jakarta Sans',
+              fontSize: 13,
+              color: AppColors.textSecondary,
+            ),
+          ),
+          if (_message != null) ...[
             const SizedBox(height: 12),
-            FilledButton.icon(
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+              decoration: BoxDecoration(
+                color: isError ? AppColors.dangerDim : AppColors.accentDim,
+                borderRadius: BorderRadius.circular(10),
+                border: Border.all(
+                  color: isError
+                      ? AppColors.danger.withOpacity(0.3)
+                      : AppColors.accent.withOpacity(0.3),
+                ),
+              ),
+              child: Text(
+                _message!,
+                style: TextStyle(
+                  fontFamily: 'Plus Jakarta Sans',
+                  fontSize: 13,
+                  color: isError ? AppColors.danger : AppColors.accent,
+                ),
+              ),
+            ),
+          ],
+          const SizedBox(height: 16),
+          SizedBox(
+            height: 44,
+            child: OutlinedButton.icon(
               onPressed: _clearing ? null : _confirmAndClear,
-              style: FilledButton.styleFrom(
-                backgroundColor: Theme.of(context).colorScheme.error,
+              style: OutlinedButton.styleFrom(
+                foregroundColor: AppColors.danger,
+                side: const BorderSide(color: AppColors.danger),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
               ),
               icon: _clearing
                   ? const SizedBox(
-                      width: 16,
-                      height: 16,
+                      width: 14,
+                      height: 14,
                       child: CircularProgressIndicator(
                         strokeWidth: 2,
-                        color: Colors.white,
+                        color: AppColors.danger,
                       ),
                     )
-                  : const Icon(Icons.delete_forever),
-              label: Text(_clearing ? 'Limpiando...' : 'Limpiar Chat'),
+                  : const Icon(Icons.delete_forever_rounded, size: 16),
+              label: Text(
+                _clearing ? 'Limpiando...' : 'Limpiar Chat',
+                style: const TextStyle(
+                  fontFamily: 'Plus Jakarta Sans',
+                  fontWeight: FontWeight.w600,
+                  fontSize: 13,
+                ),
+              ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

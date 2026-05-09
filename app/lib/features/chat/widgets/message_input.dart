@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../models/app_user.dart';
 import '../../../services/chat_service.dart';
+import '../../../theme.dart';
 
 class MessageInput extends StatefulWidget {
   const MessageInput({
@@ -48,19 +49,53 @@ class _MessageInputState extends State<MessageInput> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8),
+    return Container(
+      decoration: const BoxDecoration(
+        color: AppColors.bg,
+        border: Border(top: BorderSide(color: AppColors.border)),
+      ),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       child: Row(
         children: [
           Expanded(
             child: TextField(
               controller: _controller,
-              decoration: const InputDecoration(
+              style: const TextStyle(
+                fontFamily: 'Plus Jakarta Sans',
+                color: AppColors.textPrimary,
+                fontSize: 14,
+              ),
+              decoration: InputDecoration(
                 hintText: 'Escribe un mensaje...',
-                border: OutlineInputBorder(),
-                contentPadding: EdgeInsets.symmetric(
-                  horizontal: 12,
-                  vertical: 10,
+                hintStyle: const TextStyle(
+                  fontFamily: 'Plus Jakarta Sans',
+                  color: AppColors.textMuted,
+                  fontSize: 14,
+                ),
+                filled: true,
+                fillColor: AppColors.surfaceEl,
+                contentPadding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 12,
+                ),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(24),
+                  borderSide: const BorderSide(color: AppColors.border),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(24),
+                  borderSide: const BorderSide(color: AppColors.border),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(24),
+                  borderSide: const BorderSide(
+                    color: AppColors.primary,
+                    width: 1.5,
+                  ),
+                ),
+                disabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(24),
+                  borderSide: const BorderSide(color: AppColors.border),
                 ),
               ),
               textInputAction: TextInputAction.send,
@@ -69,19 +104,50 @@ class _MessageInputState extends State<MessageInput> {
               enabled: !_sending,
             ),
           ),
-          const SizedBox(width: 8),
-          IconButton.filled(
-            onPressed: _canSend ? _send : null,
-            icon: _sending
-                ? const SizedBox(
-                    width: 20,
-                    height: 20,
-                    child: CircularProgressIndicator(
-                      strokeWidth: 2,
-                      color: Colors.white,
-                    ),
-                  )
-                : const Icon(Icons.send),
+          const SizedBox(width: 10),
+          AnimatedContainer(
+            duration: const Duration(milliseconds: 200),
+            width: 44,
+            height: 44,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              gradient: _canSend
+                  ? const LinearGradient(
+                      colors: [AppColors.primary, AppColors.primaryBright],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                    )
+                  : null,
+              color: _canSend ? null : AppColors.surfaceEl,
+              border: _canSend
+                  ? null
+                  : Border.all(color: AppColors.border),
+            ),
+            child: Material(
+              color: Colors.transparent,
+              child: InkWell(
+                borderRadius: BorderRadius.circular(22),
+                onTap: _canSend ? _send : null,
+                child: Center(
+                  child: _sending
+                      ? const SizedBox(
+                          width: 18,
+                          height: 18,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2,
+                            color: Colors.white,
+                          ),
+                        )
+                      : Icon(
+                          Icons.send_rounded,
+                          size: 18,
+                          color: _canSend
+                              ? Colors.white
+                              : AppColors.textMuted,
+                        ),
+                ),
+              ),
+            ),
           ),
         ],
       ),

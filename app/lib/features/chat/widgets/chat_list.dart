@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../../theme.dart';
 import '../chat_controller.dart';
 import '../../../services/genui_service.dart';
 import 'genui_bubble.dart';
@@ -41,14 +42,43 @@ class _ChatListState extends State<ChatList> {
     final isLoading = controller.isLoadingHistory;
 
     if (isLoading) {
-      return const Center(child: CircularProgressIndicator());
+      return const Center(
+        child: CircularProgressIndicator(
+          color: AppColors.primary,
+          strokeWidth: 2,
+        ),
+      );
     }
 
     if (surfaceIds.isEmpty) {
-      return const Center(
-        child: Text(
-          'Sé el primero en enviar un mensaje',
-          style: TextStyle(color: Colors.grey),
+      return Center(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              width: 56,
+              height: 56,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: AppColors.surfaceEl,
+                border: Border.all(color: AppColors.border),
+              ),
+              child: const Icon(
+                Icons.chat_bubble_outline_rounded,
+                color: AppColors.textMuted,
+                size: 24,
+              ),
+            ),
+            const SizedBox(height: 16),
+            const Text(
+              'Sé el primero en enviar un mensaje',
+              style: TextStyle(
+                fontFamily: 'Plus Jakarta Sans',
+                color: AppColors.textMuted,
+                fontSize: 14,
+              ),
+            ),
+          ],
         ),
       );
     }

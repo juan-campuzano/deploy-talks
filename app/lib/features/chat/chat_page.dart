@@ -8,6 +8,7 @@ import '../../services/admin_service.dart';
 import '../../services/chat_service.dart';
 import '../../services/genui_service.dart';
 import '../../services/presence_service.dart';
+import '../../theme.dart';
 import '../enter_name/user_notifier.dart';
 import 'chat_controller.dart';
 import 'widgets/chat_list.dart';
@@ -107,35 +108,105 @@ class _ChatPageState extends State<ChatPage> {
             builder: (context, bgSnapshot) {
               final background = bgSnapshot.data;
               return Scaffold(
-                appBar: AppBar(
-                  title: StreamBuilder<int>(
-                    stream: _presenceService.activeCountStream(),
-                    builder: (context, snapshot) {
-                      final count = snapshot.data ?? 0;
-                      return Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          const Text('Deploy Talks Chat'),
-                          if (count > 0)
-                            Text(
-                              '$count ${count == 1 ? 'persona' : 'personas'} en el chat',
-                              style: const TextStyle(
-                                fontSize: 12,
-                                fontWeight: FontWeight.normal,
+                appBar: PreferredSize(
+                  preferredSize: const Size.fromHeight(64),
+                  child: Container(
+                    decoration: const BoxDecoration(
+                      color: AppColors.bg,
+                      border: Border(
+                        bottom: BorderSide(color: AppColors.border),
+                      ),
+                    ),
+                    child: SafeArea(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        child: Row(
+                          children: [
+                            Container(
+                              width: 36,
+                              height: 36,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                gradient: const LinearGradient(
+                                  colors: [AppColors.primary, AppColors.accent],
+                                  begin: Alignment.topLeft,
+                                  end: Alignment.bottomRight,
+                                ),
+                              ),
+                              child: const Icon(
+                                Icons.rocket_launch_rounded,
+                                color: Colors.white,
+                                size: 18,
                               ),
                             ),
-                        ],
-                      );
-                    },
-                  ),
-                  actions: [
-                    TextButton.icon(
-                      onPressed: () => userNotifier.clearUser(),
-                      icon: const Icon(Icons.logout),
-                      label: const Text('Salir'),
+                            const SizedBox(width: 12),
+                            Expanded(
+                              child: StreamBuilder<int>(
+                                stream: _presenceService.activeCountStream(),
+                                builder: (context, snapshot) {
+                                  final count = snapshot.data ?? 0;
+                                  return Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      const Text(
+                                        'Deploy Talks',
+                                        style: TextStyle(
+                                          fontFamily: 'Syne',
+                                          fontWeight: FontWeight.w700,
+                                          fontSize: 16,
+                                          color: AppColors.textPrimary,
+                                        ),
+                                      ),
+                                      if (count > 0)
+                                        Row(
+                                          children: [
+                                            Container(
+                                              width: 6,
+                                              height: 6,
+                                              decoration: const BoxDecoration(
+                                                shape: BoxShape.circle,
+                                                color: AppColors.accent,
+                                              ),
+                                            ),
+                                            const SizedBox(width: 5),
+                                            Text(
+                                              '$count ${count == 1 ? 'persona' : 'personas'} conectadas',
+                                              style: const TextStyle(
+                                                fontFamily: 'Plus Jakarta Sans',
+                                                fontSize: 11,
+                                                color: AppColors.textSecondary,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                    ],
+                                  );
+                                },
+                              ),
+                            ),
+                            TextButton.icon(
+                              onPressed: () => userNotifier.clearUser(),
+                              icon: const Icon(
+                                Icons.logout_rounded,
+                                size: 16,
+                                color: AppColors.textMuted,
+                              ),
+                              label: const Text(
+                                'Salir',
+                                style: TextStyle(
+                                  fontFamily: 'Plus Jakarta Sans',
+                                  fontSize: 13,
+                                  color: AppColors.textMuted,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
                     ),
-                  ],
+                  ),
                 ),
                 body: Builder(
                   builder: (context) {
